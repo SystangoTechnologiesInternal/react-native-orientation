@@ -3,11 +3,7 @@
 //
 
 #import "Orientation.h"
-#if __has_include(<React/RCTEventDispatcher.h>)
-#import <React/RCTEventDispatcher.h>
-#else
 #import "RCTEventDispatcher.h"
-#endif
 
 @implementation Orientation
 @synthesize bridge = _bridge;
@@ -24,6 +20,10 @@ static UIInterfaceOrientationMask _orientation = UIInterfaceOrientationMaskAllBu
 {
   if ((self = [super init])) {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceOrientationDidChange:) name:@"UIDeviceOrientationDidChangeNotification" object:nil];
+      
+      [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationNone];
+
+      
   }
   return self;
 
@@ -36,36 +36,42 @@ static UIInterfaceOrientationMask _orientation = UIInterfaceOrientationMaskAllBu
 
 - (void)deviceOrientationDidChange:(NSNotification *)notification
 {
+    CGSize size= [self getScreenSize];
+
+    
   UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
   [self.bridge.eventDispatcher sendDeviceEventWithName:@"specificOrientationDidChange"
                                               body:@{@"specificOrientation": [self getSpecificOrientationStr:orientation]}];
 
   [self.bridge.eventDispatcher sendDeviceEventWithName:@"orientationDidChange"
-                                              body:@{@"orientation": [self getOrientationStr:orientation]}];
+                                              body:@{@"orientation": [self getOrientationStr:orientation],
+                                                     @"width": [NSString stringWithFormat:@"%d", (int)size.width],
+                                                     @"height": [NSString stringWithFormat:@"%d", (int)size.height]}];
 
 }
 
 - (NSString *)getOrientationStr: (UIDeviceOrientation)orientation {
-  NSString *orientationStr;
-  switch (orientation) {
-    case UIDeviceOrientationPortrait:
-      orientationStr = @"PORTRAIT";
-      break;
-    case UIDeviceOrientationLandscapeLeft:
-    case UIDeviceOrientationLandscapeRight:
-
-      orientationStr = @"LANDSCAPE";
-      break;
-
-    case UIDeviceOrientationPortraitUpsideDown:
-      orientationStr = @"PORTRAITUPSIDEDOWN";
-      break;
-
-    default:
-      orientationStr = @"UNKNOWN";
-      break;
-  }
-  return orientationStr;
+    NSString *orientationStr;
+    switch (orientation) {
+        case UIDeviceOrientationPortrait:
+            orientationStr = @"PORTRAIT";
+            break;
+        case UIDeviceOrientationLandscapeLeft:
+        case UIDeviceOrientationLandscapeRight:
+            
+            orientationStr = @"LANDSCAPE";
+            break;
+            
+        case UIDeviceOrientationPortraitUpsideDown:
+            orientationStr = @"PORTRAIT";
+            break;
+            
+        default:
+            orientationStr = @"UNKNOWN";
+            break;
+    }
+    return orientationStr;
+    
 }
 
 - (NSString *)getSpecificOrientationStr: (UIDeviceOrientation)orientation {
@@ -76,15 +82,15 @@ static UIInterfaceOrientationMask _orientation = UIInterfaceOrientationMaskAllBu
       break;
 
     case UIDeviceOrientationLandscapeLeft:
-      orientationStr = @"LANDSCAPE-LEFT";
+      orientationStr = @"LANDSCAPE";
       break;
 
     case UIDeviceOrientationLandscapeRight:
-      orientationStr = @"LANDSCAPE-RIGHT";
+      orientationStr = @"LANDSCAPE";
       break;
 
     case UIDeviceOrientationPortraitUpsideDown:
-      orientationStr = @"PORTRAITUPSIDEDOWN";
+          orientationStr = @"PORTRAIT";
       break;
 
     default:
@@ -94,13 +100,26 @@ static UIInterfaceOrientationMask _orientation = UIInterfaceOrientationMaskAllBu
   return orientationStr;
 }
 
+
 RCT_EXPORT_MODULE();
+
+
+RCT_EXPORT_METHOD(getRectString:(RCTResponseSenderBlock)callback)
+{
+    CGRect screenRect = [[UIScreen mainScreen] bounds];
+    
+    callback(@[[NSNull null], [NSString stringWithFormat:@"%d", (int)screenRect.size.width], [NSString stringWithFormat:@"%d", (int)screenRect.size.height]]);
+}
 
 RCT_EXPORT_METHOD(getOrientation:(RCTResponseSenderBlock)callback)
 {
+    
   UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
   NSString *orientationStr = [self getOrientationStr:orientation];
-  callback(@[[NSNull null], orientationStr]);
+  CGSize size= [self getScreenSize];
+
+  callback(@[[NSNull null], orientationStr, [NSString stringWithFormat:@"%d", (int)size.width], [NSString stringWithFormat:@"%d", (int)size.height]]);
+    
 }
 
 RCT_EXPORT_METHOD(getSpecificOrientation:(RCTResponseSenderBlock)callback)
@@ -142,10 +161,10 @@ RCT_EXPORT_METHOD(lockToLandscape)
   }
 }
 
-RCT_EXPORT_METHOD(lockToLandscapeLeft)
+RCT_EXPORT_METHOD(lockToLandscapeRight)
 {
   #if DEBUG
-    NSLog(@"Locked to Landscape Left");
+    NSLog(@"Locked to Landscape Right");
   #endif
     [Orientation setOrientation:UIInterfaceOrientationMaskLandscapeLeft];
     [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
@@ -154,10 +173,10 @@ RCT_EXPORT_METHOD(lockToLandscapeLeft)
 
 }
 
-RCT_EXPORT_METHOD(lockToLandscapeRight)
+RCT_EXPORT_METHOD(lockToLandscapeLeft)
 {
   #if DEBUG
-    NSLog(@"Locked to Landscape Right");
+    NSLog(@"Locked to Landscape Left");
   #endif
   [Orientation setOrientation:UIInterfaceOrientationMaskLandscapeRight];
   [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
@@ -173,8 +192,23 @@ RCT_EXPORT_METHOD(unlockAllOrientations)
     NSLog(@"Unlock All Orientations");
   #endif
   [Orientation setOrientation:UIInterfaceOrientationMaskAllButUpsideDown];
-//  AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-//  delegate.orientation = 3;
+}
+
+RCT_EXPORT_METHOD(disableIQKeyBoardManager)
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"disableIQKeyBoardManager" object:nil];
+}
+
+RCT_EXPORT_METHOD(enableIQKeyBoardManager)
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"enableIQKeyBoardManager" object:nil];
+}
+
+RCT_EXPORT_METHOD(getInitialOrientation:(RCTResponseSenderBlock)callback)
+{
+    UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
+    NSString *orientationStr = [self getOrientationStr:orientation];
+    callback(@[[NSNull null], orientationStr]);
 }
 
 - (NSDictionary *)constantsToExport
@@ -187,5 +221,12 @@ RCT_EXPORT_METHOD(unlockAllOrientations)
     @"initialOrientation": orientationStr
   };
 }
+
+-(CGSize)getScreenSize{
+    
+  return [[UIScreen mainScreen] bounds].size;
+    
+}
+
 
 @end

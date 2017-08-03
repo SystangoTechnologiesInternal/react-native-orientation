@@ -1,5 +1,7 @@
 package com.github.yamill.orientation;
 
+import android.app.Activity;
+
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.JavaScriptModule;
 import com.facebook.react.bridge.NativeModule;
@@ -11,14 +13,16 @@ import java.util.Collections;
 import java.util.List;
 
 public class OrientationPackage implements ReactPackage {
+    private Activity mCurrentActivity;
 
-    public OrientationPackage() {
+    public OrientationPackage(Activity activity) {
+        mCurrentActivity = activity;
     }
 
     @Override
     public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
         return Arrays.<NativeModule>asList(
-            new OrientationModule(reactContext)
+            new OrientationModule(reactContext, mCurrentActivity)
         );
     }
 
