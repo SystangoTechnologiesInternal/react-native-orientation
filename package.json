@@ -11,9 +11,30 @@
         "type": "range"
       },
       "/Users/stplmacmini6/Documents/Projects/BatterVsPitcher"
+    ],
+    [
+      {
+        "raw": "git+https://github.com/SystangoTechnologies/react-native-orientation.git",
+        "scope": null,
+        "escapedName": null,
+        "name": null,
+        "rawSpec": "git+https://github.com/SystangoTechnologies/react-native-orientation.git",
+        "spec": "git+https://github.com/SystangoTechnologies/react-native-orientation.git",
+        "type": "hosted",
+        "hosted": {
+          "type": "github",
+          "ssh": "git@github.com:SystangoTechnologies/react-native-orientation.git",
+          "sshUrl": "git+ssh://git@github.com/SystangoTechnologies/react-native-orientation.git",
+          "httpsUrl": "git+https://github.com/SystangoTechnologies/react-native-orientation.git",
+          "gitUrl": "git://github.com/SystangoTechnologies/react-native-orientation.git",
+          "shortcut": "github:SystangoTechnologies/react-native-orientation",
+          "directUrl": "https://raw.githubusercontent.com/SystangoTechnologies/react-native-orientation/master/package.json"
+        }
+      },
+      "/Users/stplmacmini19/Projects/BatterVsPitcher 3"
     ]
   ],
-  "_from": "react-native-orientation@>=1.17.0 <2.0.0",
+  "_from": "git+https://github.com/SystangoTechnologies/react-native-orientation.git",
   "_id": "react-native-orientation@1.17.0",
   "_inCache": true,
   "_installable": true,
@@ -30,23 +51,32 @@
   "_npmVersion": "2.14.7",
   "_phantomChildren": {},
   "_requested": {
-    "raw": "react-native-orientation@^1.17.0",
+    "raw": "git+https://github.com/SystangoTechnologies/react-native-orientation.git",
     "scope": null,
-    "escapedName": "react-native-orientation",
-    "name": "react-native-orientation",
-    "rawSpec": "^1.17.0",
-    "spec": ">=1.17.0 <2.0.0",
-    "type": "range"
+    "escapedName": null,
+    "name": null,
+    "rawSpec": "git+https://github.com/SystangoTechnologies/react-native-orientation.git",
+    "spec": "git+https://github.com/SystangoTechnologies/react-native-orientation.git",
+    "type": "hosted",
+    "hosted": {
+      "type": "github",
+      "ssh": "git@github.com:SystangoTechnologies/react-native-orientation.git",
+      "sshUrl": "git+ssh://git@github.com/SystangoTechnologies/react-native-orientation.git",
+      "httpsUrl": "git+https://github.com/SystangoTechnologies/react-native-orientation.git",
+      "gitUrl": "git://github.com/SystangoTechnologies/react-native-orientation.git",
+      "shortcut": "github:SystangoTechnologies/react-native-orientation",
+      "directUrl": "https://raw.githubusercontent.com/SystangoTechnologies/react-native-orientation/master/package.json"
+    }
   },
   "_requiredBy": [
     "#USER",
     "/"
   ],
-  "_resolved": "https://registry.npmjs.org/react-native-orientation/-/react-native-orientation-1.17.0.tgz",
-  "_shasum": "bfbeba17e20f7f96d09042e31fbe5d479f1d5b94",
+  "_resolved": "git+https://github.com/SystangoTechnologies/react-native-orientation.git#ba8e6eab7ecb568b83a8f7aff884a70abf16910d",
+  "_shasum": "147b16263f8368537c2eb538dba56a9434de31e8",
   "_shrinkwrap": null,
-  "_spec": "react-native-orientation@^1.17.0",
-  "_where": "/Users/stplmacmini6/Documents/Projects/BatterVsPitcher",
+  "_spec": "git+https://github.com/SystangoTechnologies/react-native-orientation.git",
+  "_where": "/Users/stplmacmini19/Projects/BatterVsPitcher 3",
   "author": {
     "name": "Yamill Vallecillo",
     "email": "yamill@gmail.com",

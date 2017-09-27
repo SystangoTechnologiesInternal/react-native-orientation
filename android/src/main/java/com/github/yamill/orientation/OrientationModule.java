@@ -42,7 +42,6 @@ public class OrientationModule extends ReactContextBaseJavaModule {
             @Override
             public void onReceive(Context context, Intent intent) {
                 Configuration newConfig = intent.getParcelableExtra("newConfig");
-                Log.d("receiver", String.valueOf(newConfig.orientation));
 
                 DisplayMetrics metrics = ctx.getResources().getDisplayMetrics();
                 WindowManager wm = (WindowManager) ctx.getSystemService(Context.WINDOW_SERVICE);
@@ -52,7 +51,12 @@ public class OrientationModule extends ReactContextBaseJavaModule {
                 int width = (int)(size.x/metrics.density);
                 int height = (int)(size.y/metrics.density);
 
-                String orientationValue = newConfig.orientation == 1 ? "PORTRAIT" : "LANDSCAPE";
+                String orientationValue;
+                if (newConfig != null) {
+                    orientationValue = newConfig.orientation == 1 ? "PORTRAIT" : "LANDSCAPE";
+                } else {
+                    orientationValue = context.getResources().getConfiguration().orientation == 1 ? "PORTRAIT" : "LANDSCAPE" ;
+                }
 
                 WritableMap params = Arguments.createMap();
                 params.putString("orientation", orientationValue);

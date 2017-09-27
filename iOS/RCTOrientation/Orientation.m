@@ -62,16 +62,20 @@ static UIInterfaceOrientationMask _orientation = UIInterfaceOrientationMaskAllBu
             orientationStr = @"LANDSCAPE";
             break;
             
-        case UIDeviceOrientationPortraitUpsideDown:
-            orientationStr = @"PORTRAIT";
-            break;
-            
-        default:
-            orientationStr = @"UNKNOWN";
+        default:{
+            CGRect screenRect = [[UIScreen mainScreen] bounds];
+            CGFloat screenWidth = screenRect.size.width;
+            CGFloat screenHeight = screenRect.size.height;
+            if(screenWidth>screenHeight){
+                orientationStr = @"LANDSCAPE";
+            }
+            else{
+                orientationStr = @"PORTRAIT";
+            }
+        }
             break;
     }
     return orientationStr;
-    
 }
 
 - (NSString *)getSpecificOrientationStr: (UIDeviceOrientation)orientation {
